@@ -23,6 +23,9 @@ public class Landmark {
 	@Column(nullable = false, length = 100)
 	private String landmarkName;
 
-	// @Column(
+	@Column(nullable = false)
+	private double x;
 
+	@Column(nullable = false)
+	private double y;
 }

@@ -1,15 +1,18 @@
 package shop.byeol23.sogra2025.landmark.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import shop.byeol23.sogra2025.party.entity.Party;
 
 @Builder
 @Getter
@@ -42,6 +45,9 @@ public class Landmark {
 
 	@Column(columnDefinition = "VARCHAR(500) DEFAULT '대전시 서구 가리봉동 201-3'", nullable = true)
 	private String address;
+
+	@OneToMany(mappedBy = "landmark", fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<Party> parties;
 
 
 	public void incrementRecommendationCount() {

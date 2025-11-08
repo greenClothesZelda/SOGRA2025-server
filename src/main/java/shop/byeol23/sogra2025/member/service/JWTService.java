@@ -13,7 +13,6 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import shop.byeol23.sogra2025.member.dto.external.TokenResponse;
 import shop.byeol23.sogra2025.member.dto.internal.MemberInfo;
-import shop.byeol23.sogra2025.member.repository.MemberRepository;
 
 @Slf4j
 @Service
@@ -22,9 +21,11 @@ public class JWTService {
 	private final SecretKey key;
 	private final long accessExpirationSeconds;
 	private final long refreshExpirationSeconds;
+	private final shop.byeol23.sogra2025.security.LoginAttemptService loginAttemptService;
 
 	public JWTService(
 		MemberService memberService,
+		shop.byeol23.sogra2025.security.LoginAttemptService loginAttemptService,
 		@Value("${jwt.secret}") String secret,
 		@Value("${jwt.access-expiration-seconds}") long accessExpirationSeconds,
 		@Value("${jwt.refresh-expiration-seconds}") long refreshExpirationSeconds){
@@ -32,12 +33,25 @@ public class JWTService {
 		this.accessExpirationSeconds = accessExpirationSeconds;
 		this.refreshExpirationSeconds = refreshExpirationSeconds;
 		this.memberService = memberService;
+		this.loginAttemptService = loginAttemptService;
 	}
 
 	public TokenResponse login(String loginId, String password){
-		if(!memberService.authenticate(loginId, password)){
-			throw new IllegalArgumentException("Invalid login ID or password");
+		// 차단 여부 확인
+		loginAttemptService.checkBlocked(loginId);
+		try {
+			boolean ok = memberService.authenticate(loginId, password);
+			if(!ok){
+				loginAttemptService.recordFailure(loginId);
+				throw new IllegalArgumentException("Invalid login ID or password");
+			}
+		} catch (IllegalArgumentException e){
+			// 사용자 없음 등 인증 중 예외도 실패로 간주
+			loginAttemptService.recordFailure(loginId);
+			throw e;
 		}
+		// 성공 시 초기화
+		loginAttemptService.recordSuccess(loginId);
 		return createTokens(loginId);
 	}
 
@@ -60,7 +74,6 @@ public class JWTService {
 		}
 	}
 
-	// 로그인/리프레시 시점에 member 정보를 claim으로 넣어 토큰에서 바로 사용 가능하도록 함
 	public TokenResponse createTokens(String loginId){
 		MemberInfo mi = memberService.getMemberInfo(loginId);
 		String access = createAccessToken(loginId, mi);
@@ -96,12 +109,10 @@ public class JWTService {
 			.compact();
 	}
 
-	// 토큰 파싱을 호출자에게 예외로 전달 - 만료(ExpiredJwtException)와 다른 오류를 구분 가능
 	public Claims parseClaimsThrowing(String token) throws JwtException {
 		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 	}
 
-	// 토큰에서 MemberInfo를 바로 구성
 	public MemberInfo getMemberInfoFromToken(String token) throws JwtException {
 		Claims claims = parseClaimsThrowing(token);
 		String loginId = claims.getSubject();

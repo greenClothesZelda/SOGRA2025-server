@@ -10,6 +10,7 @@ import org.springframework.validation.BindException;
 
 import lombok.extern.slf4j.Slf4j;
 import shop.byeol23.sogra2025.handler.dto.ErrorResponse;
+import shop.byeol23.sogra2025.security.AccountLockedException;
 
 import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
@@ -54,6 +55,14 @@ public class GlobalExceptionHandler {
 			.collect(Collectors.joining(", "));
 		log.warn("Constraint violations: {}", message);
 		return new ErrorResponse("잘못된 요청", message);
+	}
+
+	// 계정 잠김 처리
+	@ExceptionHandler(AccountLockedException.class)
+	@ResponseStatus(HttpStatus.LOCKED)
+	public ErrorResponse handleAccountLocked(AccountLockedException ex){
+		log.warn("Account locked: {}", ex.getMessage());
+		return new ErrorResponse("계정잠김", ex.getMessage());
 	}
 
 	//서버 책임

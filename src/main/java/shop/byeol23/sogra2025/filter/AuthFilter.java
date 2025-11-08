@@ -2,6 +2,7 @@ package shop.byeol23.sogra2025.filter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,15 +37,12 @@ public class AuthFilter extends OncePerRequestFilter {
 	private final RequestMappingHandlerMapping handlerMapping; // 요청을 처리할 핸들러(메서드)를 찾기 위해 주입
 	private final ObjectMapper objectMapper; // 에러 응답을 JSON으로 생성하기 위해 주입
 
-	private static final String AUTH_HEADER = "AccessToken"; // 요청에서 사용할 헤더 이름
+	private static final String AUTH_HEADER = "Authorization"; // 요청에서 사용할 헤더 이름
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 		throws ServletException, IOException {
-		if(true){
-			filterChain.doFilter(request, response);
-			return;
-		}
+
 
 		try {
 			String requestURI = request.getRequestURI();
@@ -97,6 +95,8 @@ public class AuthFilter extends OncePerRequestFilter {
 			// 5. 토큰 검증 및 MemberInfo 추출
 			// jwtService.getMemberInfoFromToken 내부에서 파싱 및 검증(만료, 서명 등)을 수행하고 예외를 던짐
 			MemberInfo memberInfo = jwtService.getMemberInfoFromToken(token);
+
+			log.info("Authenticated memberId: {}", memberInfo.memberId());
 
 			// 6. ThreadLocal에 MemberInfo 저장
 			MemberContext.set(memberInfo);

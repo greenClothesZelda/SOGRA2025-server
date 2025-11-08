@@ -17,9 +17,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Landmark {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long memberId;
-
 	@Column(nullable = false, length = 100)
 	private String landmarkName;
 
@@ -28,4 +25,10 @@ public class Landmark {
 
 	@Column(nullable = false)
 	private double y;
+
+	@Column(columnDefinition = "BIGINT DEFAULT 0", nullable = false)
+	private Long recommendationCount;
+
+	@Column(columnDefinition = "BIGINT DEFAULT 0", nullable = false)
+	private Long visitCount;
 }

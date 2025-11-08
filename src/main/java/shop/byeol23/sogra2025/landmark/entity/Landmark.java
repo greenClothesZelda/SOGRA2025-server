@@ -32,6 +32,13 @@ public class Landmark {
 	@Column(columnDefinition = "BIGINT DEFAULT 0", nullable = false)
 	private Long visitCount;
 
+	@Column
+	private String description;
+
+	@Column()
+	private String imageUrl;
+
+
 	public void incrementRecommendationCount() {
 		this.recommendationCount++;
 	}

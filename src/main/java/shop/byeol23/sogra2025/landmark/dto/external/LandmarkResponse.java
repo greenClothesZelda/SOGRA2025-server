@@ -7,7 +7,7 @@ public record LandmarkResponse(
 	double x,
 	double y,
 	long recommendationCount,
-	long reviewCount
+	long visitCount
 
 ) {
 	public LandmarkResponse(

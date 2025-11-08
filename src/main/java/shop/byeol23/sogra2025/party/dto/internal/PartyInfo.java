@@ -19,9 +19,14 @@ public class PartyInfo {
 	@JsonIgnore
 	private final Set<MemberInfo> memberInfos;
 
-	public PartyInfo(MemberInfo ownerInfo) {
+	private final int maxMembers;
+	private final String partyName;
+
+	public PartyInfo(MemberInfo ownerInfo, int maxMembers, String partyName) {
 		this.ownerInfo = ownerInfo;
 		this.memberInfos = ConcurrentHashMap.newKeySet();
+		this.maxMembers = maxMembers;
+		this.partyName = partyName;
 	}
 
 	@JsonProperty("ownerName")

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,13 @@ public class PartyController {
 
 	// 파티 생성
 	@PostMapping("/{landmarkName}")
-	public PartyInfo createParty(@PathVariable String landmarkName) {
+	public PartyInfo createParty(
+		@PathVariable String landmarkName,
+		@RequestParam(value = "maxMembers", defaultValue = "5") int maxMembers,
+		@RequestParam(value = "partyName", required = true) String party
+	) {
 		MemberInfo memberInfo = MemberContext.get();
-		return partyService.createParty(memberInfo, landmarkName);
+		return partyService.createParty(memberInfo, landmarkName, maxMembers, party);
 	}
 
 	// 파티 참가
@@ -39,5 +44,11 @@ public class PartyController {
 	@GetMapping("/{landmarkName}/members")
 	public PartyInfo getPartyMembers(@PathVariable String landmarkName) {
 		return partyService.getPartyMembers(landmarkName);
+	}
+
+	@PostMapping("/{landmarkName}/delete")
+	public void deleteParty(@PathVariable String landmarkName){
+		String loginId = MemberContext.get().loginId();
+		partyService.deleteParty(loginId, landmarkName);
 	}
 }

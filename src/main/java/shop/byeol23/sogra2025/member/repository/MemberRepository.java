@@ -8,7 +8,6 @@ import aj.org.objectweb.asm.commons.Remapper;
 import shop.byeol23.sogra2025.member.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-	Remapper findByMemberId(Long memberId);
 
 	Optional<Member> findByLoginId(String loginId);
 

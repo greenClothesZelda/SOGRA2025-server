@@ -96,11 +96,9 @@ public class AuthFilter extends OncePerRequestFilter {
 			// jwtService.getMemberInfoFromToken 내부에서 파싱 및 검증(만료, 서명 등)을 수행하고 예외를 던짐
 			MemberInfo memberInfo = jwtService.getMemberInfoFromToken(token);
 
-			log.info("Authenticated memberId: {}", memberInfo.memberId());
-
 			// 6. ThreadLocal에 MemberInfo 저장
 			MemberContext.set(memberInfo);
-			log.debug("Successfully authenticated member: {}", memberInfo.memberId());
+			log.debug("Successfully authenticated member: {}", memberInfo.loginId());
 
 			// 7. 다음 필터 체인 실행
 			filterChain.doFilter(request, response);

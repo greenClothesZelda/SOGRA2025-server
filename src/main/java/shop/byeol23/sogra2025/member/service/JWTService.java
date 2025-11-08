@@ -19,14 +19,12 @@ import shop.byeol23.sogra2025.member.repository.MemberRepository;
 @Service
 public class JWTService {
 	private final MemberService memberService;
-	private final MemberRepository memberRepository;
 	private final SecretKey key;
 	private final long accessExpirationSeconds;
 	private final long refreshExpirationSeconds;
 
 	public JWTService(
 		MemberService memberService,
-		MemberRepository memberRepository,
 		@Value("${jwt.secret}") String secret,
 		@Value("${jwt.access-expiration-seconds}") long accessExpirationSeconds,
 		@Value("${jwt.refresh-expiration-seconds}") long refreshExpirationSeconds){
@@ -34,7 +32,6 @@ public class JWTService {
 		this.accessExpirationSeconds = accessExpirationSeconds;
 		this.refreshExpirationSeconds = refreshExpirationSeconds;
 		this.memberService = memberService;
-		this.memberRepository = memberRepository;
 	}
 
 	public TokenResponse login(String loginId, String password){
@@ -80,7 +77,6 @@ public class JWTService {
 			.setIssuedAt(issuedAt)
 			.setExpiration(exp)
 			.claim("type", "access")
-			.claim("memberId", mi.memberId())
 			.claim("memberName", mi.memberName())
 			.signWith(key)
 			.compact();
@@ -95,7 +91,6 @@ public class JWTService {
 			.setIssuedAt(issuedAt)
 			.setExpiration(exp)
 			.claim("type", "refresh")
-			.claim("memberId", mi.memberId())
 			.claim("memberName", mi.memberName())
 			.signWith(key)
 			.compact();
@@ -109,10 +104,10 @@ public class JWTService {
 	// 토큰에서 MemberInfo를 바로 구성
 	public MemberInfo getMemberInfoFromToken(String token) throws JwtException {
 		Claims claims = parseClaimsThrowing(token);
-		Number idNum = claims.get("memberId", Number.class);
-		Long memberId = idNum != null ? idNum.longValue() : null;
+		String loginId = claims.getSubject();
 		String memberName = claims.get("memberName", String.class);
-		return new MemberInfo(memberId, memberName);
+		log.info("Parsed MemberInfo from token - loginId: {}, memberName: {}", loginId, memberName);
+		return new MemberInfo(loginId, memberName);
 	}
 
 	public String parseSubject(String token){

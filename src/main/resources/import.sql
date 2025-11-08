@@ -28,3 +28,4 @@ INSERT INTO landmark (landmark_name, x, y, recommendation_count, visit_count) VA
 INSERT INTO landmark (landmark_name, x, y, recommendation_count, visit_count) VALUES ('테스트 랜드마크 28', 127.340492, 36.361771, 160, 330);
 INSERT INTO landmark (landmark_name, x, y, recommendation_count, visit_count) VALUES ('테스트 랜드마크 29', 127.351902, 36.371981, 280, 570);
 INSERT INTO landmark (landmark_name, x, y, recommendation_count, visit_count) VALUES ('테스트 랜드마크 30', 127.347912, 36.369101, 100, 200);
+INSERT INTO member (login_id, login_password, member_name) VALUES ('user123', '$2a$10$mthMVtRaiPxL0RL23Pmfw.P4e8jTkR5wqU6wMCvK1K4afcNaYYel2', '홍길동');

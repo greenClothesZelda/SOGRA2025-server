@@ -59,3 +59,4 @@ INSERT INTO member (login_id, login_password, member_name) VALUES ('u27', 'hashe
 INSERT INTO member (login_id, login_password, member_name) VALUES ('u28', 'hashed_password_28', 'Member Name 28');
 INSERT INTO member (login_id, login_password, member_name) VALUES ('u29', 'hashed_password_29', 'Member Name 29');
 INSERT INTO member (login_id, login_password, member_name) VALUES ('u30', 'hashed_password_30', 'Member Name 30');
+INSERT INTO member (login_id, login_password, member_name) VALUES ('user1234', '$2a$10$8GLuUz6w.7vgB24RqUoTPeJD5cvpy7UEj0hjuZ2QZGTppY46/iJe.', 'Member Name 31');

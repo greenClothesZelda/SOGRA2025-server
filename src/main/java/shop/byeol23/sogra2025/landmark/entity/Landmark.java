@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shop.byeol23.sogra2025.party.entity.Party;
 
 @Builder
 @Getter
@@ -45,10 +44,6 @@ public class Landmark {
 
 	@Column(columnDefinition = "VARCHAR(500) DEFAULT '대전시 서구 가리봉동 201-3'", nullable = true)
 	private String address;
-
-	@OneToMany(mappedBy = "landmark", fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<Party> parties;
-
 
 	public void incrementRecommendationCount() {
 		this.recommendationCount++;

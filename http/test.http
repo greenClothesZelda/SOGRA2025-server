@@ -1,0 +1,4 @@
+GET http://localhost:8080/health
+AccessToken:eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ1c2VyMTIzIiwiaWF0IjoxNzYyNjA1MjM2LCJleHAiOjE3NjI2MDcwMzYsInR5cGUiOiJhY2Nlc3MiLCJtZW1iZXJJZCI6MSwibWVtYmVyTmFtZSI6Iu2Zjeq4uOuPmSJ9.9W_RUN1ejuug1h70bE_aV7j5PlynCHAOBiJIbn3zcHlOgxgoYwxqtOllZbCNfK-0
+
+###

@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,11 +33,15 @@ public class Landmark {
 	@Column(columnDefinition = "BIGINT DEFAULT 0", nullable = false)
 	private Long visitCount;
 
-	@Column
+	@Column(nullable = true)
+	@Size(min = 1, max = 100)
 	private String description;
 
-	@Column()
+	@Column(columnDefinition = "VARCHAR(500) DEFAULT 'https://plus.cnu.ac.kr/Upl/en/_main_swap/en_main_swap_0_1723508360.jpg'", nullable = true)
 	private String imageUrl;
+
+	@Column(columnDefinition = "VARCHAR(500) DEFAULT '대전시 서구 가리봉동 201-3'", nullable = true)
+	private String address;
 
 
 	public void incrementRecommendationCount() {

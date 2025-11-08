@@ -5,9 +5,7 @@ import shop.byeol23.sogra2025.landmark.entity.Landmark;
 public record LandmarkResponse(
 	String name,
 	double x,
-	double y,
-	long recommendationCount,
-	long visitCount
+	double y
 
 ) {
 	public LandmarkResponse(
@@ -16,9 +14,7 @@ public record LandmarkResponse(
 		this(
 			landmark.getLandmarkName(),
 			landmark.getX(),
-			landmark.getY(),
-			landmark.getRecommendationCount(),
-			landmark.getVisitCount()
+			landmark.getY()
 		);
 	}
 }
